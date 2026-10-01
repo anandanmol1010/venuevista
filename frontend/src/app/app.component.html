@@ -1,0 +1,33 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <a routerLink="/" class="nav-brand">VenueVista</a>
+    <div class="nav-links">
+      <a routerLink="/events" routerLinkActive="active">Events</a>
+
+      <ng-container *ngIf="auth.isLoggedIn() && !auth.isAdmin()">
+        <a routerLink="/my-bookings" routerLinkActive="active">My Bookings</a>
+      </ng-container>
+
+      <ng-container *ngIf="auth.isAdmin()">
+        <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+        <a routerLink="/admin/events" routerLinkActive="active">Manage Events</a>
+        <a routerLink="/admin/venues" routerLinkActive="active">Venues</a>
+        <a routerLink="/admin/bookings" routerLinkActive="active">Bookings</a>
+        <a routerLink="/admin/analytics" routerLinkActive="active">Analytics</a>
+      </ng-container>
+    </div>
+    <div class="nav-right">
+      <ng-container *ngIf="auth.isLoggedIn(); else loginLinks">
+        <span class="user-name">{{ auth.currentUser?.name }}</span>
+        <button class="btn btn-sm btn-secondary" (click)="logout()">Logout</button>
+      </ng-container>
+      <ng-template #loginLinks>
+        <a routerLink="/login" class="btn btn-sm btn-primary">Login</a>
+      </ng-template>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
