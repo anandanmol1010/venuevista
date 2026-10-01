@@ -1,4 +1,4 @@
-package com.hcl.venuevista;
+package com.venuevista;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

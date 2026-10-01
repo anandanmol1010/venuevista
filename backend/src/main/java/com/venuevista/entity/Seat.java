@@ -15,7 +15,7 @@ public class Seat {
     @JoinColumn(name = "venue_id", nullable = false)
     private Venue venue;
 
-    @Column(name = "row_number", nullable = false)
+    @Column(name = "`row_number`", nullable = false)
     private String rowNumber;
 
     @Column(name = "seat_number", nullable = false)
