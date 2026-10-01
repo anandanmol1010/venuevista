@@ -181,3 +181,11 @@ If the database was seeded automatically upon startup, you can use the following
 This repository contains two dedicated GitHub Action workflows located in `.github/workflows`:
 1. **Frontend CI (`frontend-ci.yml`)**: Installs Node, runs `npm ci`, and executes a production Angular build (`npm run build`).
 2. **Backend CI (`backend-ci.yml`)**: Spins up a headless MySQL 8.0 service container, builds the Java binaries via Maven, and executes integration tests.
+
+---
+
+## 📄 Reports & Documentation
+Detailed project documentation and presentation materials are available in the `reports/` directory:
+
+- 📊 **[Project Presentation (PDF)](reports/HCL%20Project%20VenueVista.pptx.pdf)** — Visual overview, architecture, and feature showcase of VenueVista.
+- 📋 **[Software Requirements Specification (SRS)](reports/VenueVista_SRS_Report.docx)** — Comprehensive technical requirements, use-cases, and functional specifications.
