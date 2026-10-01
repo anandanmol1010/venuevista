@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class BookingService {
 
     private final BookingRepository bookingRepository;

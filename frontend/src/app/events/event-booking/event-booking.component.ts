@@ -83,45 +83,45 @@ import { BookingService } from '../../core/services/booking.service';
       </div>
     </div>
   `,
-  styles: [`
     .legend {
-      display: flex; gap: 16px; margin-bottom: 12px; font-size: 13px; flex-wrap: wrap;
+      display: flex; gap: 16px; margin-bottom: 12px; font-size: 13px; flex-wrap: wrap; font-weight: 500; color: var(--color-foreground);
     }
-    .legend span { display: flex; align-items: center; gap: 4px; }
+    .legend span { display: flex; align-items: center; gap: 6px; }
     .seat-box {
-      display: inline-block; width: 18px; height: 18px; border-radius: 3px;
-      border: 1px solid #ccc;
+      display: inline-block; width: 18px; height: 18px; border-radius: 4px;
+      border: 1px solid var(--color-border);
     }
-    .seat-box.available { background: #fff; }
-    .seat-box.selected { background: #1a73e8; border-color: #1a73e8; }
-    .seat-box.booked { background: #dadce0; }
-    .seat-box.vip { background: #fef7e0; border-color: #f9ab00; }
-    .seat-box.premium { background: #e8f0fe; border-color: #1a73e8; }
+    .seat-box.available { background: var(--color-card); }
+    .seat-box.selected { background: var(--color-primary); border-color: var(--color-primary); }
+    .seat-box.booked { background: var(--color-muted); }
+    .seat-box.vip { background: #fef3c7; border-color: #f59e0b; }
+    .seat-box.premium { background: #dbeafe; border-color: #3b82f6; }
 
     .screen {
-      text-align: center; background: #e8eaed; padding: 6px; border-radius: 4px;
-      font-size: 12px; color: #5f6368; margin-bottom: 16px; letter-spacing: 2px;
+      text-align: center; background: var(--color-muted); padding: 12px; border-radius: 8px;
+      font-size: 11px; color: var(--color-muted-foreground); margin-bottom: 24px; letter-spacing: 4px; font-weight: 700; border: 1px solid var(--color-border);
     }
-    .seat-layout { margin-bottom: 20px; }
+    .seat-layout { margin-bottom: 32px; background: var(--color-card); padding: 24px; border-radius: 8px; border: 1px solid var(--color-border); overflow-x: auto; }
     .seat-row {
-      display: flex; align-items: center; gap: 6px; margin-bottom: 6px; justify-content: center;
+      display: flex; align-items: center; gap: 8px; margin-bottom: 8px; justify-content: center; min-width: max-content;
     }
     .row-label {
-      width: 20px; font-size: 13px; font-weight: 600; color: #5f6368; text-align: right;
+      width: 24px; font-size: 12px; font-weight: 700; color: var(--color-muted-foreground); text-align: right; margin-right: 8px;
     }
     .seat-btn {
-      width: 36px; height: 32px; border: 1px solid #dadce0; border-radius: 4px;
-      background: #fff; cursor: pointer; font-size: 12px; color: #333;
+      width: 36px; height: 36px; border: 1px solid var(--color-border); border-radius: 6px;
+      background: var(--color-card); cursor: pointer; font-size: 11px; font-weight: 600; color: var(--color-foreground);
+      transition: all 0.15s ease;
     }
-    .seat-btn:hover:not(.booked) { border-color: #1a73e8; }
-    .seat-btn.booked { background: #e8eaed; color: #999; cursor: not-allowed; }
-    .seat-btn.selected { background: #1a73e8; color: #fff; border-color: #1a73e8; }
-    .seat-btn.vip { background: #fef7e0; border-color: #f9ab00; }
-    .seat-btn.premium { background: #e8f0fe; border-color: #a8c7fa; }
+    .seat-btn:hover:not(.booked) { border-color: var(--color-primary); }
+    .seat-btn.booked { background: var(--color-muted); color: var(--color-muted-foreground); cursor: not-allowed; opacity: 0.6; }
+    .seat-btn.selected { background: var(--color-primary); color: var(--color-on-primary); border-color: var(--color-primary); }
+    .seat-btn.vip { background: #fef3c7; border-color: #f59e0b; }
+    .seat-btn.premium { background: #dbeafe; border-color: #3b82f6; }
 
-    .summary { margin-top: 16px; max-width: 450px; }
-    .summary h3 { margin-bottom: 10px; font-size: 16px; }
-    .summary p { font-size: 14px; margin: 4px 0; }
+    .summary { margin-top: 24px; max-width: 500px; }
+    .summary h3 { margin-bottom: 12px; font-size: 18px; border-bottom: 1px solid var(--color-border); padding-bottom: 8px; }
+    .summary p { font-size: 14px; margin: 8px 0; color: var(--color-muted-foreground); }
   `]
 })
 export class EventBookingComponent implements OnInit {

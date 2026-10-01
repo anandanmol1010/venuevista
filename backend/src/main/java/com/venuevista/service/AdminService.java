@@ -8,11 +8,13 @@ import com.venuevista.entity.TicketStatus;
 import com.venuevista.repository.*;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class AdminService {
 
     private final EventRepository eventRepository;

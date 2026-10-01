@@ -65,7 +65,37 @@ import { AdminService, DashboardDTO } from '../../core/services/admin.service';
         <p *ngIf="dashboard.recentBookings.length === 0" class="empty">No bookings yet.</p>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+    .stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-muted-foreground);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  `]
 })
 export class DashboardComponent implements OnInit {
   dashboard: DashboardDTO | null = null;

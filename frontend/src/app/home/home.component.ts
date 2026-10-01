@@ -43,11 +43,11 @@ import { EventService, EventDTO } from '../core/services/event.service';
   styles: [`
     .hero {
       text-align: center;
-      padding: 64px 20px;
-      margin-bottom: 40px;
-      background: linear-gradient(180deg, #f1f5f9 0%, #f8fafc 100%);
-      border-radius: 16px;
-      border: 1px solid #e2e8f0;
+      padding: 80px 20px;
+      margin-bottom: 48px;
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
     }
     .hero-content {
       max-width: 600px;
@@ -55,25 +55,24 @@ import { EventService, EventDTO } from '../core/services/event.service';
     }
     .hero-chip {
       display: inline-block;
-      background: #ccfbf1;
-      color: #0f766e;
-      padding: 4px 12px;
-      border-radius: 9999px;
-      font-size: 13px;
+      background: var(--color-secondary);
+      color: var(--color-primary);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
+      border: 1px solid var(--color-border);
     }
     .hero h1 {
-      font-size: 40px;
-      font-weight: 800;
-      color: #0f172a;
-      margin-bottom: 16px;
-      line-height: 1.2;
-      letter-spacing: -0.025em;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 20px;
     }
     .hero p {
-      color: #475569;
-      margin-bottom: 24px;
+      color: var(--color-muted-foreground);
+      margin-bottom: 32px;
       font-size: 18px;
     }
     .hero-btn {
