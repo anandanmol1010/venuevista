@@ -83,6 +83,7 @@ import { BookingService } from '../../core/services/booking.service';
       </div>
     </div>
   `,
+  styles: [`
     .legend {
       display: flex; gap: 16px; margin-bottom: 12px; font-size: 13px; flex-wrap: wrap; font-weight: 500; color: var(--color-foreground);
     }
