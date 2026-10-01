@@ -1,166 +1,183 @@
 # VenueVista — EventPro Ticketing & Venue Management System
 
-A full-stack event ticketing and venue management web application built with Spring Boot and Angular.
+![VenueVista Overview](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-F2F4F9?style=for-the-badge&logo=spring-boot)
+![MySQL](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
 
-## Features
+VenueVista is a full-stack, enterprise-grade event ticketing and venue management platform. It provides a seamless experience for end-users to browse events, select seats, and book tickets, while offering powerful administrative tools for venue configuration, seat mapping, and real-time sales analytics.
 
-- **User Registration & Login** — JWT-based authentication with role-based access (USER / ADMIN)
-- **Event Browsing** — Users can browse, search, and filter events by name, category, and city
-- **Seat Selection & Booking** — Interactive seat layout with real-time availability, seat type display (VIP, Premium, Regular)
-- **Ticket Management** — View booking history, ticket details, print tickets, cancel bookings
-- **Venue Management** — Admin can create/edit/delete venues and configure seating layouts
-- **Event Management** — Admin can create/edit/delete events with full details
-- **Admin Dashboard** — Overview with total events, venues, users, bookings, and revenue
-- **Sales Analytics** — Event-wise ticket sales and revenue calculated from actual booking data
-- **Booking Validation** — Backend validates seats, prevents double booking, calculates prices server-side
+---
 
-## Tech Stack
+## 🎯 Features
 
-| Layer    | Technology                                        |
-|----------|---------------------------------------------------|
-| Backend  | Java 17, Spring Boot 3.2, Spring Security, JWT    |
-| Frontend | Angular 17, TypeScript, HTML, CSS                 |
-| Database | MySQL                                             |
-| ORM      | Hibernate / Spring Data JPA                       |
-| Auth     | BCrypt password hashing, JWT tokens                |
+### For Users
+- **Secure Authentication:** JWT-based login and registration.
+- **Event Discovery:** Browse upcoming events with details, pricing, and venue information.
+- **Interactive Seat Mapping:** Select specific seats from a dynamically generated visual layout map (VIP, Premium, Regular).
+- **Ticket Management:** View booking history, active tickets, and status.
 
-## Architecture
+### For Administrators
+- **Real-Time Dashboard:** View total revenue, tickets sold, and recent booking transactions.
+- **Venue Configuration:** Create venues and visually map out exact seating charts/rows.
+- **Event Management:** Schedule events, assign them to venues, and define categories.
+- **Sales Analytics:** Track event-wise performance, ticket sales, and revenue breakdown.
 
-```
-Angular (Frontend)
-      ↓ HTTP / REST
-Spring Boot (Backend)
-      ↓ JPA / Hibernate
-MySQL Database
-```
+---
 
-### Backend Structure
+## 🏗️ System Architecture
 
-```
-src/main/java/com/venuevista/
-├── controller/     — REST API endpoints
-├── service/        — Business logic
-├── repository/     — Data access (JPA)
-├── entity/         — Database entities
-├── dto/            — Data transfer objects
-├── security/       — JWT, auth filter, user details
-├── config/         — Security config, data seeder
-└── exception/      — Global exception handling
-```
+VenueVista follows a strict client-server architecture with stateless authentication. 
 
-### Frontend Structure
-
-```
-src/app/
-├── core/
-│   ├── services/       — AuthService, EventService, VenueService, BookingService, AdminService
-│   ├── guards/         — AuthGuard, AdminGuard
-│   └── interceptors/   — JWT Auth Interceptor
-├── home/               — Home page
-├── auth/               — Login, Register
-├── events/             — Event list, Event details, Event booking (seat selection)
-├── bookings/           — My bookings, Booking details (ticket view)
-└── admin/              — Dashboard, Events management, Venues management, Bookings, Analytics
+```mermaid
+graph TD
+    Client[Web Browser / User] -->|HTTP / REST APIs| Frontend[Angular SPA]
+    
+    subgraph Frontend Client
+    Frontend --> AuthGuard[Angular Route Guards]
+    AuthGuard --> Interceptor[JWT Interceptor]
+    end
+    
+    Interceptor -->|Bearer Token| Gateway[Spring Security Filter Chain]
+    
+    subgraph Spring Boot Backend
+    Gateway --> Controllers[REST Controllers]
+    Controllers --> Services[Business Logic / Services]
+    Services --> Repositories[Spring Data JPA Interfaces]
+    Repositories --> Hibernate[Hibernate ORM]
+    end
+    
+    Hibernate -->|JDBC| Database[(MySQL 8.0 Database)]
 ```
 
-## Database Setup
+---
 
-1. Install MySQL and create a database:
+## 🔄 Core Workflows
 
-```sql
-CREATE DATABASE venuevista;
+### 1. Interactive Booking Flow
+The core logic of VenueVista revolves around guaranteeing seat uniqueness and preventing double-booking during high concurrency.
+
+```mermaid
+sequenceDiagram
+    actor U as User
+    participant UI as Angular Frontend
+    participant API as Spring Boot API
+    participant DB as MySQL Database
+    
+    U->>UI: Clicks "Book Tickets"
+    UI->>API: GET /api/events/{id}/seats
+    API->>DB: Query Available Seats
+    DB-->>API: List of Seats & Status
+    API-->>UI: Render Seat Map
+    U->>UI: Selects Seats & Confirms
+    UI->>API: POST /api/bookings (Seat IDs)
+    
+    rect rgb(230, 240, 255)
+    Note over API,DB: Transactional Block
+    API->>DB: Lock requested seats
+    DB-->>API: Seat Status Validation
+    API->>API: Calculate Total Price & Generate Ref
+    API->>DB: INSERT Booking & Tickets
+    end
+    
+    API-->>UI: 200 OK (Booking Reference)
+    UI-->>U: Show Success Screen & Tickets
 ```
 
-2. The application uses `spring.jpa.hibernate.ddl-auto=update`, so tables are created automatically on first run.
-
-## Environment Variables
-
-| Variable     | Default                              | Description           |
-|-------------|--------------------------------------|-----------------------|
-| DB_URL      | jdbc:mysql://localhost:3306/venuevista | MySQL connection URL  |
-| DB_USERNAME | root                                 | MySQL username        |
-| DB_PASSWORD | root                                 | MySQL password        |
-| JWT_SECRET  | (auto-generated)                     | JWT signing key       |
-
-You can set these as environment variables or edit `application.properties` directly.
-
-## How to Run
-
-### Backend
-
-```bash
-cd backend
-./mvnw spring-boot:run
+### 2. Administrator Venue Creation
+```mermaid
+flowchart LR
+    A[Admin] -->|Creates Venue| B(Venue Details)
+    B --> C{Seat Configuration}
+    C -->|Row A| D[VIP Seats]
+    C -->|Row B| E[Premium Seats]
+    C -->|Row C| F[Regular Seats]
+    D --> G[(Save to Database)]
+    E --> G
+    F --> G
 ```
 
-Backend starts at: `http://localhost:8080`
+---
 
-### Frontend
+## 💻 Tech Stack
 
-```bash
-cd frontend
-npm install
-npx ng serve
-```
+**Frontend:**
+- **Framework:** Angular 17 (Standalone Components)
+- **Styling:** Custom Vanilla CSS Grid / Flexbox (Flat Minimal UI Design System)
+- **Routing:** Angular Router with AuthGuards
+- **State:** RxJS Observables & Signals
 
-Frontend starts at: `http://localhost:4200`
+**Backend:**
+- **Framework:** Spring Boot 3.2 (Java 17)
+- **Security:** Spring Security 6 + JJWT (JSON Web Tokens)
+- **ORM:** Hibernate + Spring Data JPA
+- **Database:** MySQL 8.0
 
-## API Endpoints
+**DevOps & CI/CD:**
+- **Pipeline:** GitHub Actions (Automated Build & Test)
+- **Services:** Integrated MySQL Docker container for CI testing
+- **Build Tool:** Maven (Backend) / NPM (Frontend)
 
-### Authentication
-| Method | Endpoint              | Description    | Auth     |
-|--------|----------------------|----------------|----------|
-| POST   | /api/auth/register   | Register user  | No       |
-| POST   | /api/auth/login      | Login          | No       |
+---
 
-### Events
-| Method | Endpoint           | Description       | Auth     |
-|--------|-------------------|-------------------|----------|
-| GET    | /api/events       | List/search events | No       |
-| GET    | /api/events/{id}  | Get event details  | No       |
-| POST   | /api/events       | Create event       | ADMIN    |
-| PUT    | /api/events/{id}  | Update event       | ADMIN    |
-| DELETE | /api/events/{id}  | Delete event       | ADMIN    |
+## 🚀 Getting Started
 
-### Venues
-| Method | Endpoint                    | Description          | Auth     |
-|--------|----------------------------|----------------------|----------|
-| GET    | /api/venues                | List venues          | No       |
-| GET    | /api/venues/{id}           | Get venue            | No       |
-| POST   | /api/venues                | Create venue         | ADMIN    |
-| PUT    | /api/venues/{id}           | Update venue         | ADMIN    |
-| DELETE | /api/venues/{id}           | Delete venue         | ADMIN    |
-| GET    | /api/venues/{id}/seats     | Get seats            | No       |
-| POST   | /api/venues/{id}/seats     | Configure seats      | ADMIN    |
-| DELETE | /api/venues/{id}/seats     | Delete all seats     | ADMIN    |
+### Prerequisites
+- Node.js 18.x or higher
+- Java 17 (JDK 17)
+- MySQL 8.0 (or XAMPP)
 
-### Bookings
-| Method | Endpoint                    | Description         | Auth     |
-|--------|----------------------------|---------------------|----------|
-| POST   | /api/bookings              | Create booking      | USER     |
-| GET    | /api/bookings/my           | My bookings         | USER     |
-| GET    | /api/bookings/{id}         | Booking details     | USER     |
-| PUT    | /api/bookings/{id}/cancel  | Cancel booking      | USER     |
+### 1. Database Setup
+1. Open your MySQL client (or phpMyAdmin) and create the database:
+   ```sql
+   CREATE DATABASE venuevista;
+   ```
+2. The application is configured to automatically create tables (`ddl-auto=update`).
+3. *(Optional)* A `DataSeeder` class in the backend will automatically inject a default Admin account, Venues, and Events upon first boot if the database is empty.
 
-### Admin
-| Method | Endpoint                     | Description          | Auth     |
-|--------|------------------------------|----------------------|----------|
-| GET    | /api/admin/dashboard         | Dashboard stats      | ADMIN    |
-| GET    | /api/admin/analytics/sales   | Event sales data     | ADMIN    |
-| GET    | /api/admin/bookings          | All bookings         | ADMIN    |
-| GET    | /api/admin/users             | All users            | ADMIN    |
+### 2. Backend Setup
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+2. Build the project:
+   ```bash
+   ./mvnw clean package
+   ```
+3. Run the Spring Boot server:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+   *The backend will run on `http://localhost:8080`*
 
-## Default Login Credentials
+### 3. Frontend Setup
+1. Open a new terminal and navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the Angular development server:
+   ```bash
+   npm run start
+   ```
+   *The frontend will be accessible at `http://localhost:4200`*
 
-| Role  | Email                  | Password   |
-|-------|------------------------|------------|
-| Admin | admin@venuevista.com   | Admin@123  |
-| User  | user@venuevista.com    | User@123   |
+---
 
-## Sample Data
+## 🔐 Default Test Credentials
+If the database was seeded automatically upon startup, you can use the following credentials:
 
-On first run, the application automatically seeds:
-- 1 Admin user + 1 regular User
-- 3 Venues with configured seats
-- 5 Events
-- 1 Sample booking with 2 tickets
+| Role | Email | Password |
+|------|-------|----------|
+| **Admin** | `admin@venuevista.com` | `Admin@123` |
+| **User** | `user@venuevista.com` | `User@123` |
+
+---
+
+## 🛡️ CI/CD Pipelines
+This repository contains two dedicated GitHub Action workflows located in `.github/workflows`:
+1. **Frontend CI (`frontend-ci.yml`)**: Installs Node, runs `npm ci`, and executes a production Angular build (`npm run build`).
+2. **Backend CI (`backend-ci.yml`)**: Spins up a headless MySQL 8.0 service container, builds the Java binaries via Maven, and executes integration tests.
